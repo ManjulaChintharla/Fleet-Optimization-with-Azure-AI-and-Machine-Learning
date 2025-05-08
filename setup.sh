@@ -17,6 +17,7 @@ RESOURCE_PROVIDER3="Microsoft.AlertsManagement"
 RESOURCE_PROVIDER4="Microsoft.Web"
 RESOURCE_PROVIDER5="Microsoft.DBforPostgreSQL"
 RESOURCE_PROVIDER6="Microsoft.DataFactory"
+RESOURCE_PROVIDER7="Microsoft.CognitiveServices"
 # REGIONS=("eastus" "westus" "centralus" "northeurope" "westeurope")
 REGIONS=("eastus" "westus" "centralus" )
 AIREGIONS=("eastus" "southcentralus" )
@@ -89,6 +90,7 @@ az provider register --namespace $RESOURCE_PROVIDER3
 az provider register --namespace $RESOURCE_PROVIDER4
 az provider register --namespace $RESOURCE_PROVIDER5
 az provider register --namespace $RESOURCE_PROVIDER6
+az provider register --namespace $RESOURCE_PROVIDER7
 
 az configure --defaults group=$RESOURCE_GROUP
 
