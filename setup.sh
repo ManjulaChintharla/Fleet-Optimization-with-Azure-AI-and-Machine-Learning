@@ -10,15 +10,15 @@ suffix=${guid//[-]/}
 suffix=${suffix:0:5}
 
 # Set the necessary variables
-RESOURCE_PROVIDER="Microsoft.MachineLearningServices"
-RESOURCE_PROVIDER1="Microsoft.PolicyInsights"
-RESOURCE_PROVIDER2="Microsoft.Cdn"
-RESOURCE_PROVIDER3="Microsoft.AlertsManagement"
-RESOURCE_PROVIDER4="Microsoft.Web"
-RESOURCE_PROVIDER5="Microsoft.DBforPostgreSQL"
-RESOURCE_PROVIDER6="Microsoft.DataFactory"
-RESOURCE_PROVIDER7="Microsoft.CognitiveServices"
-RESOURCE_PROVIDER8="Microsoft.Search"
+#RESOURCE_PROVIDER="Microsoft.MachineLearningServices"
+#RESOURCE_PROVIDER1="Microsoft.PolicyInsights"
+#RESOURCE_PROVIDER2="Microsoft.Cdn"
+#RESOURCE_PROVIDER3="Microsoft.AlertsManagement"
+#RESOURCE_PROVIDER4="Microsoft.Web"
+#RESOURCE_PROVIDER5="Microsoft.DBforPostgreSQL"
+#RESOURCE_PROVIDER6="Microsoft.DataFactory"
+#RESOURCE_PROVIDER7="Microsoft.CognitiveServices"
+#RESOURCE_PROVIDER8="Microsoft.Search"
 # REGIONS=("eastus" "westus" "centralus" "northeurope" "westeurope")
 REGIONS=("eastus" "westus" "centralus" )
 AIREGIONS=("eastus" "southcentralus" )
@@ -68,31 +68,50 @@ else
 fi
 
 # Assign roles to the current user
-az role assignment create --assignee $USER_OBJECT_ID --role "Key Vault Data Access Administrator" --scope "/subscriptions/$SUBSCRIPTION_ID"
-az role assignment create --assignee $USER_OBJECT_ID --role "Key Vault Administrator" --scope "/subscriptions/$SUBSCRIPTION_ID"
-az role assignment create --assignee $USER_OBJECT_ID --role "AzureML Compute Operator" --scope "/subscriptions/$SUBSCRIPTION_ID"
-az role assignment create --assignee $USER_OBJECT_ID --role "Search Index Data Reader" --scope "/subscriptions/$SUBSCRIPTION_ID"
-az role assignment create --assignee $USER_OBJECT_ID --role "Cognitive Services Contributor" --scope "/subscriptions/$SUBSCRIPTION_ID"
-az role assignment create --assignee $USER_OBJECT_ID --role "Cognitive Services OpenAI User" --scope "/subscriptions/$SUBSCRIPTION_ID"
-az role assignment create --assignee $USER_OBJECT_ID --role "Search Service Contributor" --scope "/subscriptions/$SUBSCRIPTION_ID"
-az role assignment create --assignee $USER_OBJECT_ID --role "Azure AI Developer" --scope "/subscriptions/$SUBSCRIPTION_ID"
-az role assignment create --assignee $USER_OBJECT_ID --role "Storage Blob Data Contributor" --scope "/subscriptions/$SUBSCRIPTION_ID"
+
+roles=(
+  "Key Vault Data Access Administrator"
+  "Key Vault Administrator"
+  "AzureML Compute Operator"
+  "Search Index Data Reader"
+  "Cognitive Services Contributor"
+  "Cognitive Services OpenAI User"
+  "Search Service Contributor"
+  "Azure AI Developer"
+  "Storage Blob Data Contributor"
+)
+
+# Loop through each role and assign it
+for role in "${roles[@]}"
+do
+  az role assignment create --assignee "$USER_OBJECT_ID" --role "$role" --scope "/subscriptions/$SUBSCRIPTION_ID"
+done
 
 
 echo "****Roles assigned successfully to User ID: $USER_OBJECT_ID"
 
 
 # Registring the Azure Machine Learning resource provider in the subscription
-echo "Register the Machine Learning resource providers:"
-az provider register --namespace $RESOURCE_PROVIDER
-az provider register --namespace $RESOURCE_PROVIDER1
-az provider register --namespace $RESOURCE_PROVIDER2
-az provider register --namespace $RESOURCE_PROVIDER3
-az provider register --namespace $RESOURCE_PROVIDER4
-az provider register --namespace $RESOURCE_PROVIDER5
-az provider register --namespace $RESOURCE_PROVIDER6
-az provider register --namespace $RESOURCE_PROVIDER7
-az provider register --namespace $RESOURCE_PROVIDER8
+
+# List of resource providers
+providers=(
+  "Microsoft.MachineLearningServices"
+  "Microsoft.PolicyInsights"
+  "Microsoft.Cdn"
+  "Microsoft.AlertsManagement"
+  "Microsoft.Web"
+  "Microsoft.DBforPostgreSQL"
+  "Microsoft.DataFactory"
+  "Microsoft.CognitiveServices"
+  "Microsoft.Search"
+)
+
+# Loop through each provider and register it
+for provider in "${providers[@]}"
+do
+  az provider register --namespace "$provider"
+done
+
 
 az configure --defaults group=$RESOURCE_GROUP
 
