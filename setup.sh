@@ -51,7 +51,6 @@ else
     echo "Using existing Resource Group: $RESOURCE_GROUP"
 fi
 
-
 # Get the subscription ID
 SUBSCRIPTION_ID=$(az account show --query id --output tsv)
 TENANT_ID=$(az account show --query tenantId --output tsv)
@@ -68,31 +67,26 @@ else
 fi
 
 # Assign roles to the current user
-
 roles=(
-  "Key Vault Data Access Administrator"
-  "Key Vault Administrator"
-  "AzureML Compute Operator"
-  "Search Index Data Reader"
-  "Cognitive Services Contributor"
-  "Cognitive Services OpenAI User"
-  "Search Service Contributor"
-  "Azure AI Developer"
-  "Storage Blob Data Contributor"
+  "Key Vault Data Access Administrator"
+  "Key Vault Administrator"
+  "AzureML Compute Operator"
+  "Search Index Data Reader"
+  "Cognitive Services Contributor"
+  "Cognitive Services OpenAI User"
+  "Search Service Contributor"
+  "Azure AI Developer"
+  "Storage Blob Data Contributor"
 )
-
 # Loop through each role and assign it
 for role in "${roles[@]}"
 do
   az role assignment create --assignee "$USER_OBJECT_ID" --role "$role" --scope "/subscriptions/$SUBSCRIPTION_ID"
 done
 
-
 echo "****Roles assigned successfully to User ID: $USER_OBJECT_ID"
 
-
 # Registring the Azure Machine Learning resource provider in the subscription
-
 # List of resource providers
 providers=(
   "Microsoft.MachineLearningServices"
@@ -105,13 +99,11 @@ providers=(
   "Microsoft.CognitiveServices"
   "Microsoft.Search"
 )
-
 # Loop through each provider and register it
 for provider in "${providers[@]}"
 do
   az provider register --namespace "$provider"
 done
-
 
 az configure --defaults group=$RESOURCE_GROUP
 
@@ -165,15 +157,9 @@ az keyvault set-policy   --name $keyVaultName  --resource-group $RESOURCE_GROUP 
 storageAccountName=$(az storage account list --query "[?contains(name, 'amlwscfgstorage')].name | [0]" --output tsv)
 az role assignment create --assignee $(az account show --query user.name --output tsv) --role "Storage Blob Data Contributor" --scope "/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP/providers/Microsoft.Storage/storageAccounts/$storageAccountName"
 
-
-
-
-
 echo "Creating an Azure database for PostgreSQL with name: $Azure_POSTGRESQL_NAME"
 
 az postgres flexible-server create --location westus --resource-group $RESOURCE_GROUP --name $Azure_POSTGRESQL_NAME --admin-user $USERNAME --admin-password $PASSWORD --sku-name Standard_D2s_v3 --tier GeneralPurpose --storage-size 128 --tags "Environment=Dev" --version 14 --high-availability Disabled --public-access All
-
-
 
 echo "Username of postgresql is  " : $USERNAME
 echo "Password of postgresql is  " : $PASSWORD
