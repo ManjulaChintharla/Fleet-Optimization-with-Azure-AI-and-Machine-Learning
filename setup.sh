@@ -2,7 +2,7 @@
 
 echo "Setting up environment..."
 
-az login --use-device-code
+#az login --use-device-code
 
 # Create random string
 guid=$(cat /proc/sys/kernel/random/uuid)
