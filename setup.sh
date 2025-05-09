@@ -10,15 +10,14 @@ suffix=${guid//[-]/}
 suffix=${suffix:0:5}
 
 # Set the necessary variables
-#RESOURCE_PROVIDER="Microsoft.MachineLearningServices"
-#RESOURCE_PROVIDER1="Microsoft.PolicyInsights"
-#RESOURCE_PROVIDER2="Microsoft.Cdn"
-#RESOURCE_PROVIDER3="Microsoft.AlertsManagement"
-#RESOURCE_PROVIDER4="Microsoft.Web"
-#RESOURCE_PROVIDER5="Microsoft.DBforPostgreSQL"
-#RESOURCE_PROVIDER6="Microsoft.DataFactory"
-#RESOURCE_PROVIDER7="Microsoft.CognitiveServices"
-#RESOURCE_PROVIDER8="Microsoft.Search"
+#RESOURCE_GROUP="rg-contosofleetguard-l${suffix}"
+RESOURCE_PROVIDER="Microsoft.MachineLearningServices"
+RESOURCE_PROVIDER1="Microsoft.PolicyInsights"
+RESOURCE_PROVIDER2="Microsoft.Cdn"
+RESOURCE_PROVIDER3="Microsoft.AlertsManagement"
+RESOURCE_PROVIDER4="Microsoft.Web"
+RESOURCE_PROVIDER5="Microsoft.DBforPostgreSQL"
+RESOURCE_PROVIDER6="Microsoft.DataFactory"
 # REGIONS=("eastus" "westus" "centralus" "northeurope" "westeurope")
 REGIONS=("eastus" "westus" "centralus" )
 AIREGIONS=("eastus" "southcentralus" )
@@ -38,19 +37,6 @@ RULE_NAME="AllowClientIP"
 AZURE_OPENAI_NAME="fleetazai${suffix}"
 AZURE_SEARCH="fleet-search-service${suffix}"
 
-echo "Enter the name of an existing Azure Resource Group:"
-read RESOURCE_GROUP
-
-# Check if the resource group exists
-RG_EXISTS=$(az group exists --name $RESOURCE_GROUP)
-
-if [ "$RG_EXISTS" = false ]; then
-    echo "Error: Resource Group '$RESOURCE_GROUP' does not exist. Please create it first or enter a valid name."
-    exit 1
-else
-    echo "Using existing Resource Group: $RESOURCE_GROUP"
-fi
-
 # Get the subscription ID
 SUBSCRIPTION_ID=$(az account show --query id --output tsv)
 TENANT_ID=$(az account show --query tenantId --output tsv)
@@ -67,45 +53,43 @@ else
 fi
 
 # Assign roles to the current user
-roles=(
-  "Key Vault Data Access Administrator"
-  "Key Vault Administrator"
-  "AzureML Compute Operator"
-  "Search Index Data Reader"
-  "Cognitive Services Contributor"
-  "Cognitive Services OpenAI User"
-  "Search Service Contributor"
-  "Azure AI Developer"
-  "Storage Blob Data Contributor"
-)
-# Loop through each role and assign it
-for role in "${roles[@]}"
-do
-  az role assignment create --assignee "$USER_OBJECT_ID" --role "$role" --scope "/subscriptions/$SUBSCRIPTION_ID"
-done
+az role assignment create --assignee $USER_OBJECT_ID --role "Key Vault Data Access Administrator" --scope "/subscriptions/$SUBSCRIPTION_ID"
+az role assignment create --assignee $USER_OBJECT_ID --role "Key Vault Administrator" --scope "/subscriptions/$SUBSCRIPTION_ID"
+az role assignment create --assignee $USER_OBJECT_ID --role "AzureML Compute Operator" --scope "/subscriptions/$SUBSCRIPTION_ID"
+az role assignment create --assignee $USER_OBJECT_ID --role "Search Index Data Reader" --scope "/subscriptions/$SUBSCRIPTION_ID"
+az role assignment create --assignee $USER_OBJECT_ID --role "Cognitive Services Contributor" --scope "/subscriptions/$SUBSCRIPTION_ID"
+az role assignment create --assignee $USER_OBJECT_ID --role "Cognitive Services OpenAI User" --scope "/subscriptions/$SUBSCRIPTION_ID"
+az role assignment create --assignee $USER_OBJECT_ID --role "Search Service Contributor" --scope "/subscriptions/$SUBSCRIPTION_ID"
+az role assignment create --assignee $USER_OBJECT_ID --role "Azure AI Developer" --scope "/subscriptions/$SUBSCRIPTION_ID"
+az role assignment create --assignee $USER_OBJECT_ID --role "Storage Blob Data Contributor" --scope "/subscriptions/$SUBSCRIPTION_ID"
+
 
 echo "****Roles assigned successfully to User ID: $USER_OBJECT_ID"
 
-# Registring the Azure Machine Learning resource provider in the subscription
-# List of resource providers
-providers=(
-  "Microsoft.MachineLearningServices"
-  "Microsoft.PolicyInsights"
-  "Microsoft.Cdn"
-  "Microsoft.AlertsManagement"
-  "Microsoft.Web"
-  "Microsoft.DBforPostgreSQL"
-  "Microsoft.DataFactory"
-  "Microsoft.CognitiveServices"
-  "Microsoft.Search"
-)
-# Loop through each provider and register it
-for provider in "${providers[@]}"
-do
-  az provider register --namespace "$provider"
-done
 
+# Registring the Azure Machine Learning resource provider in the subscription
+echo "Register the Machine Learning resource providers:"
+az provider register --namespace $RESOURCE_PROVIDER
+az provider register --namespace $RESOURCE_PROVIDER1
+az provider register --namespace $RESOURCE_PROVIDER2
+az provider register --namespace $RESOURCE_PROVIDER3
+az provider register --namespace $RESOURCE_PROVIDER4
+az provider register --namespace $RESOURCE_PROVIDER5
+az provider register --namespace $RESOURCE_PROVIDER6
+
+
+#echo "Create a resource group and set as default:"
+#az group create --name $RESOURCE_GROUP --location $RANDOM_REGION
 az configure --defaults group=$RESOURCE_GROUP
+# Check if the resource group exists
+RG_EXISTS=$(az group exists --name $RESOURCE_GROUP)
+
+if [ "$RG_EXISTS" = false ]; then
+    echo "Error: Resource Group '$RESOURCE_GROUP' does not exist. Please create it first or enter a valid name."
+    exit 1
+else
+    echo "Using existing Resource Group: $RESOURCE_GROUP"
+fi
 
 echo "Creating an Azure Machine Learning workspace:"
 az ml workspace create --name $WORKSPACE_NAME 
@@ -157,9 +141,15 @@ az keyvault set-policy   --name $keyVaultName  --resource-group $RESOURCE_GROUP 
 storageAccountName=$(az storage account list --query "[?contains(name, 'amlwscfgstorage')].name | [0]" --output tsv)
 az role assignment create --assignee $(az account show --query user.name --output tsv) --role "Storage Blob Data Contributor" --scope "/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP/providers/Microsoft.Storage/storageAccounts/$storageAccountName"
 
+
+
+
+
 echo "Creating an Azure database for PostgreSQL with name: $Azure_POSTGRESQL_NAME"
 
 az postgres flexible-server create --location westus --resource-group $RESOURCE_GROUP --name $Azure_POSTGRESQL_NAME --admin-user $USERNAME --admin-password $PASSWORD --sku-name Standard_D2s_v3 --tier GeneralPurpose --storage-size 128 --tags "Environment=Dev" --version 14 --high-availability Disabled --public-access All
+
+
 
 echo "Username of postgresql is  " : $USERNAME
 echo "Password of postgresql is  " : $PASSWORD
