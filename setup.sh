@@ -80,7 +80,6 @@ az provider register --namespace $RESOURCE_PROVIDER6
 
 #echo "Create a resource group and set as default:"
 #az group create --name $RESOURCE_GROUP --location $RANDOM_REGION
-az configure --defaults group=$RESOURCE_GROUP
 # Check if the resource group exists
 RG_EXISTS=$(az group exists --name $RESOURCE_GROUP)
 
@@ -90,6 +89,8 @@ if [ "$RG_EXISTS" = false ]; then
 else
     echo "Using existing Resource Group: $RESOURCE_GROUP"
 fi
+
+az configure --defaults group=$RESOURCE_GROUP
 
 echo "Creating an Azure Machine Learning workspace:"
 az ml workspace create --name $WORKSPACE_NAME 
