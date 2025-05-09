@@ -90,8 +90,8 @@ az provider register --namespace $RESOURCE_PROVIDER5
 az provider register --namespace $RESOURCE_PROVIDER6
 
 # Creating the resource group , workspace and setting to default
-echo "Create a resource group and set as default:"
-az group create --name $RESOURCE_GROUP --location $RANDOM_REGION
+#echo "Create a resource group and set as default:"
+#az group create --name $RESOURCE_GROUP --location $RANDOM_REGION
 az configure --defaults group=$RESOURCE_GROUP
 
 echo "Creating an Azure Machine Learning workspace:"
