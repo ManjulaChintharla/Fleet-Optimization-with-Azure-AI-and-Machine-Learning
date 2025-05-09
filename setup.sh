@@ -40,6 +40,18 @@ AZURE_SEARCH="fleet-search-service${suffix}"
 # Get the subscription ID
 SUBSCRIPTION_ID=$(az account show --query id --output tsv)
 TENANT_ID=$(az account show --query tenantId --output tsv)
+echo "Enter the name of an existing Azure Resource Group:"
+read RESOURCE_GROUP
+
+# Check if the resource group exists
+RG_EXISTS=$(az group exists --name $RESOURCE_GROUP)
+
+if [ "$RG_EXISTS" = false ]; then
+    echo "Error: Resource Group '$RESOURCE_GROUP' does not exist. Please create it first or enter a valid name."
+    exit 1
+else
+    echo "Using existing Resource Group: $RESOURCE_GROUP"
+fi
 
 # Automatically retrieve the current user's Object ID
 USER_OBJECT_ID=$(az ad signed-in-user show --query id --output tsv)
@@ -77,19 +89,9 @@ az provider register --namespace $RESOURCE_PROVIDER4
 az provider register --namespace $RESOURCE_PROVIDER5
 az provider register --namespace $RESOURCE_PROVIDER6
 
-
-#echo "Create a resource group and set as default:"
-#az group create --name $RESOURCE_GROUP --location $RANDOM_REGION
-# Check if the resource group exists
-RG_EXISTS=$(az group exists --name $RESOURCE_GROUP)
-
-if [ "$RG_EXISTS" = false ]; then
-    echo "Error: Resource Group '$RESOURCE_GROUP' does not exist. Please create it first or enter a valid name."
-    exit 1
-else
-    echo "Using existing Resource Group: $RESOURCE_GROUP"
-fi
-
+# Creating the resource group , workspace and setting to default
+echo "Create a resource group and set as default:"
+az group create --name $RESOURCE_GROUP --location $RANDOM_REGION
 az configure --defaults group=$RESOURCE_GROUP
 
 echo "Creating an Azure Machine Learning workspace:"
