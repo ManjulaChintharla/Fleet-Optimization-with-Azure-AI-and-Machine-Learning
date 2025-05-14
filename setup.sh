@@ -247,7 +247,8 @@ az cognitiveservices account deployment create -g $RESOURCE_GROUP -n $AZURE_OPEN
 
 #Deploy chat completion models
 #az cognitiveservices account deployment create --name $AZURE_OPENAI_NAME --resource-group $RESOURCE_GROUP --deployment-name completions --model-name gpt-4-turbo --model-version 0163 --sku S0
-az cognitiveservices account deployment create -g $RESOURCE_GROUP -n $AZURE_OPENAI_NAME  --deployment-name completions  --model-name gpt-4-turbo --model-version "0125" --model-format OpenAI --sku-capacity 1 --sku-name "Standard"
+#az cognitiveservices account deployment create -g $RESOURCE_GROUP -n $AZURE_OPENAI_NAME  --deployment-name completions  --model-name gpt-4-turbo --model-version "0125" --model-format OpenAI --sku-capacity 1 --sku-name "Standard"
+az cognitiveservices account deployment create -g $RESOURCE_GROUP   -n $AZURE_OPENAI_NAME --deployment-name completions --model-name gpt-4-turbo  --model-version "2024-04-09" --model-format OpenAI --sku-capacity 1 --sku-name "Standard"
 
 
 
