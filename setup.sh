@@ -239,7 +239,8 @@ az search service create  --name $AZURE_SEARCH --resource-group $RESOURCE_GROUP 
 #south central region
 #az cognitiveservices account deployment create -g $RESOURCE_GROUP -n $AZURE_OPENAI_NAME --deployment-name completions --model-name gpt-4.1 --model-version "2025-04-14" --model-format OpenAI --sku-capacity 1   --sku-name "GlobalStandard"
 
-az role assignment create   --assignee  $TENANT_ID   --role "Contributor"  --scope /subscriptions//$SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP/providers/Microsoft.MachineLearningServices/workspaces/$WORKSPACE_NAME
+az role assignment create   --assignee  $TENANT_ID   --role "Contributor"  --scope /subscriptions/$SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP/providers/Microsoft.MachineLearningServices/workspaces/$WORKSPACE_NAME
+az role assignment create  --assignee $TENANT_ID    --role "Key Vault Secrets User"  --scope /subscriptions/$SUBSCRIPTION_ID /resourceGroups/$RESOURCE_GROUP providers/Microsoft.KeyVault/vaults/$keyVaultName
 
 
 
