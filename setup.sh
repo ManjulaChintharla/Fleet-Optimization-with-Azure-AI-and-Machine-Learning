@@ -231,15 +231,15 @@ az search service create  --name $AZURE_SEARCH --resource-group $RESOURCE_GROUP 
 
 #Deploy text embedding models
 # az cognitiveservices account deployment create --name $AZURE_OPENAI_NAME --resource-group $RESOURCE_GROUP --deployment-name embeddings --model-name text-embedding-ada-002 --model-version 2 --sku S0
-az cognitiveservices account deployment create -g $RESOURCE_GROUP -n $AZURE_OPENAI_NAME  --deployment-name embeddings  --model-name text-embedding-ada-002 --model-version "2" --model-format OpenAI --sku-capacity 1 --sku-name "Standard" --rate-limit "tokens-per-minute=1000000" --rate-limit "requests-per-minute=6000"
+#az cognitiveservices account deployment create -g $RESOURCE_GROUP -n $AZURE_OPENAI_NAME  --deployment-name embeddings  --model-name text-embedding-ada-002 --model-version "2" --model-format OpenAI --sku-capacity 1 --sku-name "Standard" --rate-limit "tokens-per-minute=1000000" --rate-limit "requests-per-minute=6000"
 
 #Deploy chat completion models
 #az cognitiveservices account deployment create --name $AZURE_OPENAI_NAME --resource-group $RESOURCE_GROUP --deployment-name completions --model-name gpt-4-turbo --model-version 0163 --sku S0
-az cognitiveservices account deployment create -g $RESOURCE_GROUP -n $AZURE_OPENAI_NAME  --deployment-name completions  --model-name gpt-35-turbo --model-version "0125" --model-format OpenAI --sku-capacity 1 --sku-name "Standard" --rate-limit "tokens-per-minute=60000" --rate-limit "requests-per-minute=600"
+#az cognitiveservices account deployment create -g $RESOURCE_GROUP -n $AZURE_OPENAI_NAME  --deployment-name completions  --model-name gpt-35-turbo --model-version "0125" --model-format OpenAI --sku-capacity 1 --sku-name "Standard" --rate-limit "tokens-per-minute=60000" --rate-limit "requests-per-minute=600"
 #south central region
 #az cognitiveservices account deployment create -g $RESOURCE_GROUP -n $AZURE_OPENAI_NAME --deployment-name completions --model-name gpt-4.1 --model-version "2025-04-14" --model-format OpenAI --sku-capacity 1   --sku-name "GlobalStandard"
 
-az role assignment create   --assignee  $TENANT_ID   --role "Contributor"  --scope /subscriptions//$SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP /providers/Microsoft.MachineLearningServices/workspaces/$WORKSPACE_NAME
+az role assignment create   --assignee  $TENANT_ID   --role "Contributor"  --scope /subscriptions//$SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP/providers/Microsoft.MachineLearningServices/workspaces/$WORKSPACE_NAME
 
 
 
