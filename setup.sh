@@ -70,6 +70,8 @@ else
     echo "User Object ID: $USER_OBJECT_ID"
 fi
 
+echo "tenant ID: $TENANT_ID"
+
 # Assign roles to the current user
 az role assignment create --assignee $USER_OBJECT_ID --role "Key Vault Data Access Administrator" --scope "/subscriptions/$SUBSCRIPTION_ID"
 az role assignment create --assignee $USER_OBJECT_ID --role "Key Vault Administrator" --scope "/subscriptions/$SUBSCRIPTION_ID"
@@ -80,8 +82,8 @@ az role assignment create --assignee $USER_OBJECT_ID --role "Cognitive Services 
 az role assignment create --assignee $USER_OBJECT_ID --role "Search Service Contributor" --scope "/subscriptions/$SUBSCRIPTION_ID"
 az role assignment create --assignee $USER_OBJECT_ID --role "Azure AI Developer" --scope "/subscriptions/$SUBSCRIPTION_ID"
 az role assignment create --assignee $USER_OBJECT_ID --role "Storage Blob Data Contributor" --scope "/subscriptions/$SUBSCRIPTION_ID"
-#az role assignment create --assignee $TENANT_ID --role "Contributor" --scope "/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP""
-#az role assignment create --assignee $USER_OBJECT_ID --role "Key Vault Secrets User" --scope "/subscriptions/$SUBSCRIPTION_ID"
+az role assignment create --assignee $TENANT_ID --role "Contributor" --scope "/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP"
+az role assignment create --assignee $USER_OBJECT_ID --role "Key Vault Secrets User" --scope "/subscriptions/$SUBSCRIPTION_ID"
 
 echo "****Roles assigned successfully to User ID: $USER_OBJECT_ID"
 
@@ -94,7 +96,7 @@ az provider register --namespace $RESOURCE_PROVIDER2
 az provider register --namespace $RESOURCE_PROVIDER3
 az provider register --namespace $RESOURCE_PROVIDER4
 az provider register --namespace $RESOURCE_PROVIDER5
-#az provider register --namespace $RESOURCE_PROVIDER6
+az provider register --namespace $RESOURCE_PROVIDER6
 az provider register --namespace $RESOURCE_PROVIDER7
 az provider register --namespace $RESOURCE_PROVIDER8
 
