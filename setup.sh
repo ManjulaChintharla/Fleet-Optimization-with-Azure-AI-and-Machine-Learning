@@ -186,32 +186,17 @@ az datafactory linked-service create \
     }'
 
 # Link PostgreSQL
-echo "🔗 Linking PostgreSQL to ADF..."
-az datafactory linked-service create \
-    --resource-group $RESOURCE_GROUP \
-    --factory-name $ADF_NAME \
-    --name "PostgreSQLLinkedService" \
-    --properties '{
-        "type": "AzurePostgreSql",
-        "typeProperties": {
-            "connectionString": "Host='$Azure_POSTGRESQL_NAME'.postgres.database.azure.com;Port='$POSTGRESQL_PORT';Database='$DB_NAME';User Id='$USERNAME';Password='$PASSWORD';SslMode=Require;TrustServerCertificate=True;",
-            "version": "1.0"
-        }
-    }'
 
-    
-: '
-DB_NAME=$(az postgres flexible-server db list \
-    --resource-group $RESOURCE_GROUP \
-    --server-name $POSTGRES_SERVER_NAME \
-    --query "[?name=='$NEW_DB_NAME'].name" --output tsv)
-    ------
-    #Check if the database was created successfully:
-    az postgres flexible-server db list \
-    --resource-group $RESOURCE_GROUP \
-    --server-name $POSTGRES_SERVER_NAME \
-    --query "[].name" --output table
-'
+az datafactory linked-service create \
+  --resource-group $RESOURCE_GROUP \
+  --factory-name $ADF_NAME \
+  --name PostgreSQLLinkedService \
+  --properties "{
+    \"type\": \"AzurePostgreSql\",
+    \"typeProperties\": {
+      \"connectionString\": \"Host=${Azure_POSTGRESQL_NAME}.postgres.database.azure.com;Port=5432;Database=flexibleserverdb;Uid=citus@${Azure_POSTGRESQL_NAME};Pwd=Fhtest208;Encrypt=true;SslMode=Require;TrustServerCertificate=false\"
+    }
+  }"
 
 
 # Create a Container in Azure Storage Account
