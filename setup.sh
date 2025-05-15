@@ -45,7 +45,7 @@ SUBSCRIPTION_ID=$(az account show --query id --output tsv)
 TENANT_ID=$(az account show --query tenantId --output tsv)
 echo "Enter the name of an existing Azure Resource Group:"
 read RESOURCE_GROUP
-
+az config set extension.dynamic_install_allow_preview=true
 # Check if the resource group exists
 RG_EXISTS=$(az group exists --name $RESOURCE_GROUP)
 
