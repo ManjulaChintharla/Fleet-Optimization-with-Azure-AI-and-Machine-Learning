@@ -77,9 +77,7 @@ az role assignment create --assignee $USER_OBJECT_ID --role "Cognitive Services 
 az role assignment create --assignee $USER_OBJECT_ID --role "Search Service Contributor" --scope "/subscriptions/$SUBSCRIPTION_ID"
 az role assignment create --assignee $USER_OBJECT_ID --role "Azure AI Developer" --scope "/subscriptions/$SUBSCRIPTION_ID"
 az role assignment create --assignee $USER_OBJECT_ID --role "Storage Blob Data Contributor" --scope "/subscriptions/$SUBSCRIPTION_ID"
-az role assignment create --assignee $USER_OBJECT_ID --role "Contributor" --scope "/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP"
-
-
+az role assignment create --assignee $USER_OBJECT_ID --role "Contributor" --scope "/subscriptions/$SUBSCRIPTION_ID"
 
 echo "****Roles assigned successfully to User ID: $USER_OBJECT_ID"
 
@@ -95,35 +93,7 @@ az provider register --namespace $RESOURCE_PROVIDER5
 az provider register --namespace $RESOURCE_PROVIDER6
 az provider register --namespace $RESOURCE_PROVIDER7
 az provider register --namespace $RESOURCE_PROVIDER8
-#!/bin/bash
 
-# Required parameters
-ASSIGNEE_NAME=$1                       # Name of the user-assigned identity or service principal
-ROLE_NAME=${2:-"Contributor"}          # Default to Contributor if not specified
-SCOPE=$3                               # Resource group or subscription scope
-
-# Get the object ID
-echo "Retrieving object ID for: $ASSIGNEE_NAME"
-OBJECT_ID=$(az ad sp list --display-name "$ASSIGNEE_NAME" --query "[0].objectId" -o tsv)
-
-# Fallback if not a service principal (try user-assigned managed identity)
-if [ -z "$OBJECT_ID" ]; then
-    OBJECT_ID=$(az identity show --name "$ASSIGNEE_NAME" --query "principalId" -o tsv)
-fi
-
-if [ -z "$OBJECT_ID" ]; then
-    echo "ERROR: Could not retrieve object ID for $ASSIGNEE_NAME"
-    exit 1
-fi
-
-echo "Assigning role '$ROLE_NAME' to object ID $OBJECT_ID at scope $SCOPE"
-
-az role assignment create \
-  --assignee "$OBJECT_ID" \
-  --role "$ROLE_NAME" \
-  --scope "$SCOPE"
-
-echo "✅ Role assignment complete."
 
 
 # Creating the resource group , workspace and setting to default
