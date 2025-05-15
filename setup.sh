@@ -91,7 +91,7 @@ az provider register --namespace $RESOURCE_PROVIDER2
 az provider register --namespace $RESOURCE_PROVIDER3
 az provider register --namespace $RESOURCE_PROVIDER4
 az provider register --namespace $RESOURCE_PROVIDER5
-az provider register --namespace $RESOURCE_PROVIDER6
+#az provider register --namespace $RESOURCE_PROVIDER6
 az provider register --namespace $RESOURCE_PROVIDER7
 az provider register --namespace $RESOURCE_PROVIDER8
 
