@@ -78,6 +78,7 @@ az role assignment create --assignee $USER_OBJECT_ID --role "Search Service Cont
 az role assignment create --assignee $USER_OBJECT_ID --role "Azure AI Developer" --scope "/subscriptions/$SUBSCRIPTION_ID"
 az role assignment create --assignee $USER_OBJECT_ID --role "Storage Blob Data Contributor" --scope "/subscriptions/$SUBSCRIPTION_ID"
 az role assignment create --assignee $USER_OBJECT_ID --role "Contributor" --scope "/subscriptions/$SUBSCRIPTION_ID"
+az role assignment create --assignee $USER_OBJECT_ID --role "Key Vault Secrets User" --scope "/subscriptions/$SUBSCRIPTION_ID"
 
 echo "****Roles assigned successfully to User ID: $USER_OBJECT_ID"
 
