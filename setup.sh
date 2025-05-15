@@ -82,7 +82,7 @@ az role assignment create --assignee $USER_OBJECT_ID --role "Cognitive Services 
 az role assignment create --assignee $USER_OBJECT_ID --role "Search Service Contributor" --scope "/subscriptions/$SUBSCRIPTION_ID"
 az role assignment create --assignee $USER_OBJECT_ID --role "Azure AI Developer" --scope "/subscriptions/$SUBSCRIPTION_ID"
 az role assignment create --assignee $USER_OBJECT_ID --role "Storage Blob Data Contributor" --scope "/subscriptions/$SUBSCRIPTION_ID"
-az role assignment create --assignee $TENANT_ID --role "Contributor" --scope "/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP"
+#az role assignment create --assignee $TENANT_ID --role "Contributor" --scope "/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP"
 az role assignment create --assignee $USER_OBJECT_ID --role "Key Vault Secrets User" --scope "/subscriptions/$SUBSCRIPTION_ID"
 
 echo "****Roles assigned successfully to User ID: $USER_OBJECT_ID"
@@ -158,14 +158,9 @@ storageAccountName=$(az storage account list --query "[?contains(name, 'amlwscfg
 az role assignment create --assignee $(az account show --query user.name --output tsv) --role "Storage Blob Data Contributor" --scope "/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP/providers/Microsoft.Storage/storageAccounts/$storageAccountName"
 
 
-
-
-
 echo "Creating an Azure database for PostgreSQL with name: $Azure_POSTGRESQL_NAME"
 
 az postgres flexible-server create --location westus --resource-group $RESOURCE_GROUP --name $Azure_POSTGRESQL_NAME --admin-user $USERNAME --admin-password $PASSWORD --sku-name Standard_D2s_v3 --tier GeneralPurpose --storage-size 128 --tags "Environment=Dev" --version 14 --high-availability Disabled --public-access All
-
-
 
 echo "Username of postgresql is  " : $USERNAME
 echo "Password of postgresql is  " : $PASSWORD
@@ -244,6 +239,7 @@ az cognitiveservices account deployment create -g $RESOURCE_GROUP -n $AZURE_OPEN
 #south central region
 #az cognitiveservices account deployment create -g $RESOURCE_GROUP -n $AZURE_OPENAI_NAME --deployment-name completions --model-name gpt-4.1 --model-version "2025-04-14" --model-format OpenAI --sku-capacity 1   --sku-name "GlobalStandard"
 
+az role assignment create   --assignee  $TENANT_ID   --role "Contributor"  --scope /subscriptions//$SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP /providers/Microsoft.MachineLearningServices/workspaces/$WORKSPACE_NAME
 
 
 
