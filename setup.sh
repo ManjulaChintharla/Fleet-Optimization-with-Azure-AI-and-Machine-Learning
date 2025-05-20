@@ -149,10 +149,11 @@ az role assignment create --assignee $ManagedIdentityId  --role "Key Vault Certi
 az role assignment create --assignee $ManagedIdentityId --role "Key Vault Secrets User" --scope "/subscriptions/$(az account show --query id --output tsv)/resourceGroups/$RESOURCE_GROUP/providers/Microsoft.KeyVault/vaults/$keyVaultName"
 
 # Switch Key Vault to Vault Access Policy Mode
-az keyvault update --name $keyVaultName  --resource-group $RESOURCE_GROUP --enable-rbac-authorization false
+#az keyvault update --name $keyVaultName  --resource-group $RESOURCE_GROUP --enable-rbac-authorization false
 
 # Create Access Policy for ADF Managed Identity
-az keyvault set-policy   --name $keyVaultName  --resource-group $RESOURCE_GROUP   --object-id $ManagedIdentityId   --secret-permissions get list   --key-permissions get list    --certificate-permissions get list
+#az keyvault set-policy   --name $keyVaultName  --resource-group $RESOURCE_GROUP   --object-id $ManagedIdentityId   --secret-permissions get list   --key-permissions get list    --certificate-permissions get list
+az role assignment create --assignee $ManagedIdentityId --role "Key Vault Secrets User" --scope "$KEY_VAULT_SCOPE"
 
 # Search for the storage account by name pattern
 storageAccountName=$(az storage account list --query "[?contains(name, 'amlwscfgstorage')].name | [0]" --output tsv)
