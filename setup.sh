@@ -83,7 +83,7 @@ az role assignment create --assignee $USER_OBJECT_ID --role "Cognitive Services 
 az role assignment create --assignee $USER_OBJECT_ID --role "Search Service Contributor" --scope "/subscriptions/$SUBSCRIPTION_ID"
 az role assignment create --assignee $USER_OBJECT_ID --role "Azure AI Developer" --scope "/subscriptions/$SUBSCRIPTION_ID"
 az role assignment create --assignee $USER_OBJECT_ID --role "Storage Blob Data Contributor" --scope "/subscriptions/$SUBSCRIPTION_ID"
-az role assignment create --assignee $USER_OBJECT_ID --role "LODContributor" --scope "/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP"
+#az role assignment create --assignee $USER_OBJECT_ID --role "LODContributor" --scope "/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP"
 #az role assignment create --assignee $USER_OBJECT_ID --role "Key Vault Secrets User" --scope "/subscriptions/$SUBSCRIPTION_ID"
 
 echo "****Roles assigned successfully to User ID: $USER_OBJECT_ID"
@@ -241,8 +241,11 @@ az search service create  --name $AZURE_SEARCH --resource-group $RESOURCE_GROUP 
 #south central region
 #az cognitiveservices account deployment create -g $RESOURCE_GROUP -n $AZURE_OPENAI_NAME --deployment-name completions --model-name gpt-4.1 --model-version "2025-04-14" --model-format OpenAI --sku-capacity 1   --sku-name "GlobalStandard"
 
-az role assignment create  --assignee  $USER_OBJECT_ID --role "Contributor"  --scope /subscriptions/$SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP/providers/Microsoft.MachineLearningServices/workspaces/$WORKSPACE_NAME
-az role assignment create  --assignee $USER_OBJECT_ID  --role "Key Vault Secrets User"  --scope /subscriptions/$SUBSCRIPTION_ID /resourceGroups/$RESOURCE_GROUP providers/Microsoft.KeyVault/vaults/$keyVaultName
+#az role assignment create  --assignee  $USER_OBJECT_ID --role "Contributor"  --scope /subscriptions/$SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP/providers/Microsoft.MachineLearningServices/workspaces/$WORKSPACE_NAME
+#az role assignment create  --assignee $USER_OBJECT_ID  --role "Key Vault Secrets User"  --scope /subscriptions/$SUBSCRIPTION_ID /resourceGroups/$RESOURCE_GROUP providers/Microsoft.KeyVault/vaults/$keyVaultName
+SP_APP_ID=$(az ad sp list --query "[0].appId" --output tsv)
+SP_OBJECT_ID=$(az ad sp show --id $SP_APP_ID --query id --output tsv)
+az role assignment create  --assignee $SP_OBJECT_ID  --role "Azure Container Instances Contributor Role"  --scope "/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP"
 
 
 
