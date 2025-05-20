@@ -136,7 +136,7 @@ keyVaultName=$(az keyvault list --query "[?contains(name, 'amlwscfgkeyvault')].n
 KEY_VAULT_SCOPE="/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP/providers/Microsoft.KeyVault/vaults/$keyVaultName"
 
 # Grant "Key Vault Secrets User" role (for secret access)
-az role assignment create --assignee $ManagedIdentityId  --role "Key Vault Secrets User"   --scope "$KEY_VAULT_SCOPE"
+#az role assignment create --assignee $ManagedIdentityId  --role "Key Vault Secrets User"   --scope "$KEY_VAULT_SCOPE"
 
 # Grant "Key Vault Crypto User" role (for key access)
 az role assignment create --assignee $ManagedIdentityId   --role "Key Vault Crypto User"     --scope "$KEY_VAULT_SCOPE"
