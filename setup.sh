@@ -230,6 +230,9 @@ az search service create  --name $AZURE_SEARCH --resource-group $RESOURCE_GROUP 
 
 #az role assignment create  --assignee  $USER_OBJECT_ID --role "Contributor"  --scope /subscriptions/$SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP/providers/Microsoft.MachineLearningServices/workspaces/$WORKSPACE_NAME
 #az role assignment create  --assignee $USER_OBJECT_ID  --role "Key Vault Secrets User"  --scope /subscriptions/$SUBSCRIPTION_ID /resourceGroups/$RESOURCE_GROUP providers/Microsoft.KeyVault/vaults/$keyVaultName
+
+echo "Service principal configurtion takes 3-5 min..."
+
 SP_APP_ID=$(az ad sp list --query "[0].appId" --output tsv)
 SP_OBJECT_ID=$(az ad sp show --id $SP_APP_ID --query id --output tsv)
 az role assignment create  --assignee $SP_OBJECT_ID  --role "Azure Container Instances Contributor Role"  --scope "/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP"
