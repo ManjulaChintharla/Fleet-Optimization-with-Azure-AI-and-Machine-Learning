@@ -62,6 +62,7 @@ fi
 # Automatically retrieve the current user's Object ID
 USER_OBJECT_ID=$(az ad signed-in-user show --query id --output tsv)
 
+
 # Check if the USER_OBJECT_ID is empty or null
 if [ -z "$USER_OBJECT_ID" ]; then
     echo "Error: Unable to retrieve the User Object ID. Please check your Azure CLI login or permissions."
@@ -82,7 +83,7 @@ az role assignment create --assignee $USER_OBJECT_ID --role "Cognitive Services 
 az role assignment create --assignee $USER_OBJECT_ID --role "Search Service Contributor" --scope "/subscriptions/$SUBSCRIPTION_ID"
 az role assignment create --assignee $USER_OBJECT_ID --role "Azure AI Developer" --scope "/subscriptions/$SUBSCRIPTION_ID"
 az role assignment create --assignee $USER_OBJECT_ID --role "Storage Blob Data Contributor" --scope "/subscriptions/$SUBSCRIPTION_ID"
-#az role assignment create --assignee $TENANT_ID --role "Contributor" --scope "/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP"
+az role assignment create --assignee $USER_OBJECT_ID --role "LODContributor" --scope "/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP"
 az role assignment create --assignee $USER_OBJECT_ID --role "Key Vault Secrets User" --scope "/subscriptions/$SUBSCRIPTION_ID"
 
 echo "****Roles assigned successfully to User ID: $USER_OBJECT_ID"
